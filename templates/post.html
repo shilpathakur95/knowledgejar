@@ -70,7 +70,15 @@
 {% else %}
 <h2>No posts</h2>
 {% endif %}
-<button type="button" class="btn btn-success" onclick="location.href='/piazza/addposts/{{ id }}';"><span class="glyphicon glyphicon-comment" aria-hidden="false"></span><span class="sr-only">Add Posts</span></button>
+<form method="post" action="/piazza/owncourse/{{ id }}/posts/">
+    {% csrf_token %}
+    {% for field in post_form %}
+        <div class="fieldWrapper">
+        {{ field.label_tag }}{{ field }}<br>
+        </div>
+    {% endfor %}
+    <button type="submit" value="Add course">Add Post</button><br>
+       </form>
 <button class="btn btn-primary" onclick="location.href='/piazza/owncourse/';">Back</button>
 </div><!-- /.container -->
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response,RequestContext,get_object_or_404
-from testing.forms import UserForm, UserProfileForm
+from testing.forms import UserForm, UserProfileForm,PostForm,CourseForm
 from django.contrib.auth import authenticate, login,logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.loader import get_template
@@ -9,6 +9,7 @@ from django.views.generic.edit import CreateView,DeleteView,UpdateView
 from django.core.urlresolvers import reverse,reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.admin import User
 
 # Create your views here.
 def home(request):
@@ -20,17 +21,17 @@ def first(request):
     template = get_template("first.html")
     return HttpResponse(template.render())
 
-@method_decorator(login_required,name='dispatch')
-class coursecreateview(CreateView):
-    model = Course
-    fields = {"course_name"}
-
-    def form_valid(self, form):
-        form.instance.owner = self.request.user
-        return super(coursecreateview, self).form_valid(form)
-
-    def get_success_url(self):
-        return reverse("list")
+# @method_decorator(login_required,name='dispatch')
+# class coursecreateview(CreateView):
+#     model = Course
+#     fields = {"course_name"}
+#
+#     def form_valid(self, form):
+#         form.instance.owner = self.request.user
+#         return super(coursecreateview, self).form_valid(form)
+#
+#     def get_success_url(self):
+#         return reverse("list")
 
 @method_decorator(login_required,name='dispatch')
 class courseupdateview(UpdateView):
@@ -62,30 +63,41 @@ class coursedeleteview(DeleteView):
 def list(request):
     q=Course.objects.filter(owner=request.user.id)
     template = get_template("style.html")
-    return HttpResponse(template.render(context={'list': q}, request=request))
+    if request.method == 'POST':
+        course_form = CourseForm(data=request.POST)
+        course_form.instance.owner=User.objects.get(id=request.user.id)
+        course_form.save()
+    else:
+        course_form=CourseForm()
+    return HttpResponse(template.render(context={'list': q,'course_form':course_form}, request=request))
 
 def postlist(request,pk):
     q=Posts.objects.filter(courseid=pk)
     template = get_template("post.html")
-    return HttpResponse(template.render(context={'list': q,'id':pk}, request=request))
+    if request.method == 'POST':
+        post_form = PostForm(data=request.POST)
+        post_form.instance.courseid = Course.objects.get(id=pk)
+        post_form.save()
+    else:
+        post_form = PostForm()
+    return HttpResponse(template.render(context={'list': q,'id':pk,'post_form':post_form}, request=request))
 
 
-@method_decorator(login_required,name='dispatch')
-class postcreateview(CreateView):
-    model=Posts
-    fields = {'title','content'}
-    def form_valid(self, form):
-        form.instance.courseid = Course.objects.get(id=self.kwargs.get('pk'))
-        return super(postcreateview, self).form_valid(form)
-
-    def get_success_url(self):
-        return reverse("posts", kwargs={'pk': self.kwargs.get('pk')})
+# @method_decorator(login_required,name='dispatch')
+# class postcreateview(CreateView):
+#     model=Posts
+#     fields = {'title','content'}
+#     def form_valid(self, form):
+#         form.instance.courseid = Course.objects.get(id=self.kwargs.get('pk'))
+#         return super(postcreateview, self).form_valid(form)
+#
+#     def get_success_url(self):
+#         return reverse("posts", kwargs={'pk': self.kwargs.get('pk')})
 
 @method_decorator(login_required,name='dispatch')
 class postupdateview(UpdateView):
     model=Posts
     fields = {'title', 'content'}
-
     def get_success_url(self):
         return reverse("posts", kwargs={'pk': self.kwargs.get('id')})
 
@@ -130,6 +142,7 @@ def postdetail(request,pk):
     cour=Course.objects.get(id=pk)
     template = get_template("postdetails.html")
     return HttpResponse(template.render(context={'list': q,'c':cour}, request=request))
+
 
 def register(request):
     # Like before, get the request's context.
@@ -216,7 +229,7 @@ def user_login(request):
                 #return response
             else:
                 # An inactive account was used - no logging in!
-                return HttpResponse("Your Rango account is disabled.")
+                return HttpResponse("Your Knowledge Jar account is disabled.")
         else:
             # Bad login details were provided. So we can't log the user in.
             print "Invalid login details: {0}, {1}".format(username, password)

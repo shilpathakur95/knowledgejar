@@ -73,7 +73,11 @@
 {% else %}
 <h2>No courses </h2>
 {% endif %}
-<button type="button" class="btn btn-success" onclick="location.href='/piazza/addcourse';">Add Course</button>
+<form method="post" action="/piazza/owncourse/">
+    {% csrf_token %}
+    {{ course_form }}
+    <button type="submit" value="Add course">Add Course</button>
+       </form>
 
 </div><!-- /.container -->
 
