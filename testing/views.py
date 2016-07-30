@@ -127,8 +127,9 @@ def unenroll(request,pk):
 
 def postdetail(request,pk):
     q=Posts.objects.filter(courseid=pk)
+    cour=Course.objects.get(id=pk)
     template = get_template("postdetails.html")
-    return HttpResponse(template.render(context={'list': q}, request=request))
+    return HttpResponse(template.render(context={'list': q,'c':cour}, request=request))
 
 def register(request):
     # Like before, get the request's context.

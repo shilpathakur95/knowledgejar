@@ -6,12 +6,13 @@ from django.db import models
 
 from django.db import models
 from django.contrib.auth.admin import User
+from datetime import datetime
 import django.forms
 
 
 class Course(models.Model):
     course_name=models.CharField(max_length=60)
-    created_on = models.DateField()
+    created_on = models.DateField(default=datetime.now)
     owner = models.ForeignKey(User)
     class Meta:
         ordering = ('created_on',)
@@ -24,6 +25,10 @@ class Posts(models.Model):
     courseid = models.ForeignKey(Course)
     title=models.CharField(max_length=100)
     content=models.CharField(max_length=500)
+    created_on = models.DateField(default=datetime.now)
+
+    class Meta:
+        ordering = ('created_on',)
     def __str__(self):
        return self.title
 
