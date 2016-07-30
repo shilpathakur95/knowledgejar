@@ -23,7 +23,7 @@ def first(request):
 @method_decorator(login_required,name='dispatch')
 class coursecreateview(CreateView):
     model = Course
-    fields = {"course_name","created_on"}
+    fields = {"course_name"}
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
