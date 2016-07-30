@@ -101,7 +101,7 @@ class postdeleteview(DeleteView):
 def allcourses(request):
     e=UserProfile.objects.get(pk=request.user.id)
     en=e.enrolled.all()
-    q = Course.objects.exclude(id__in=[o.id for o in en]).exclude(pk=request.user.id)
+    q = Course.objects.exclude(id__in=[o.id for o in en]).exclude(owner=request.user.id)
     template = get_template("allcourses.html")
     return HttpResponse(template.render(context={'list': q,'enro':en}, request=request))
 
@@ -111,7 +111,7 @@ def enroll(request,pk):
     u1.enrolled.add(c1)
     e = UserProfile.objects.get(pk=request.user.id)
     en = e.enrolled.all()
-    q = Course.objects.exclude(id__in=[o.id for o in en]).exclude(pk=request.user.id)
+    q = Course.objects.exclude(id__in=[o.id for o in en]).exclude(owner=request.user.id)
     template = get_template("allcourses.html")
     return HttpResponse(template.render(context={'list': q, 'enro': en}, request=request))
 
@@ -121,7 +121,7 @@ def unenroll(request,pk):
     u1.enrolled.remove(c1)
     e = UserProfile.objects.get(pk=request.user.id)
     en = e.enrolled.all()
-    q = Course.objects.exclude(id__in=[o.id for o in en]).exclude(pk=request.user.id)
+    q = Course.objects.exclude(id__in=[o.id for o in en]).exclude(owner=request.user.id)
     template = get_template("allcourses.html")
     return HttpResponse(template.render(context={'list': q, 'enro': en}, request=request))
 
