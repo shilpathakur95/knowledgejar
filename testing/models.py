@@ -24,7 +24,7 @@ class Course(models.Model):
 class Posts(models.Model):
     courseid = models.ForeignKey(Course)
     title=models.CharField(max_length=100)
-    content=models.CharField(max_length=1500)
+    content=models.CharField(max_length=2000)
     created_on = models.DateField(default=datetime.now)
 
     class Meta:
