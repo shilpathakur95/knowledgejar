@@ -120,7 +120,17 @@ body {
 .register-button{
     position: fixed;
   top: 70%;
-  left:48%;
+  left:44%;
+  width: 7rem;
+  height: 7rem;
+  border: none;
+  border-radius:60%;
+  border: 0.6rem solid transparent;
+}
+.home-button{
+    position: fixed;
+  top: 70%;
+  left:52%;
   width: 7rem;
   height: 7rem;
   border: none;
@@ -194,7 +204,7 @@ body {
 <body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
- <h1 style="color:white;">Login to Knowledge World</h1>
+ <h1 style="color:white;">Login to Knowledge Jar</h1>
 	<div class="container">
         <div class="login">
   <header class="login-header"><span class="text">LOGIN</span><span class="loader"></span></header>
@@ -210,5 +220,6 @@ body {
         </div>
         </div>
 <button type="button" class="register-button"  onclick="location.href='/piazza/register/';"><strong>REGISTER</strong></button>
+<button type="button" class="home-button"  onclick="location.href='/';"><strong>HOME</strong></button>
 </body>
 </html>

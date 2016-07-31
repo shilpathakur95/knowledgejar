@@ -174,6 +174,26 @@ body {
 .login-btn:hover:after, .login-btn:focus:after, .login-btn:active:after {
   border-left-color: orange;
 }
+        .register-button{
+    position: fixed;
+  top: 20%;
+  left:44%;
+  width: 7rem;
+  height: 7rem;
+  border: none;
+  border-radius:60%;
+  border: 0.6rem solid transparent;
+}
+.home-button{
+    position: fixed;
+  top: 20%;
+  left:60%;
+  width: 7rem;
+  height: 7rem;
+  border: none;
+  border-radius:60%;
+  border: 0.6rem solid transparent;
+}
     </style>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -189,7 +209,6 @@ body {
         {% if registered %}
        <h1 style="color:white;">Knowldge Jar says says: <strong>thank you for registering!</strong></h1><br>
             <button type="button" class="btn btn-primary"  onclick="location.href='/login/';">Login</button>
-        <a href="/login/">Login</a><br />
 {% else %}
 	<div class="container">
         <div class="login">
@@ -206,10 +225,12 @@ body {
             {{ profile_form.as_p }}
 
             <!-- Provide a button to click to submit the form. -->
-            <button type="submit" class="login-btn" name="submit" value="Register"/>
+            <button type="submit" class="login-btn" name="submit" value="Register"></button>
         </form>
             </div>
     </div>
+            <button type="button" class="register-button"  onclick="location.href='/login/';"><strong>LOGIN</strong></button>
+<button type="button" class="home-button"  onclick="location.href='/';"><strong>HOME</strong></button>
         {% endif %}
     </body>
 </html>
